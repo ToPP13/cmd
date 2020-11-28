@@ -3,6 +3,7 @@
 //
 
 #include "../include/interpreter.h"
+#include "iostream"
 
 Interpreter::Interpreter(uint batch_size):_batch_size(batch_size), _bracket_counter(0)
 {
@@ -11,22 +12,13 @@ Interpreter::Interpreter(uint batch_size):_batch_size(batch_size), _bracket_coun
 }
 
 
-void Interpreter::process(const std::string & current_cmd)
-{
-    setStatus(current_cmd);
-    _inner_interpreter->process(current_cmd);
-}
-
-void Interpreter::setStatus(const std::string & current_cmd)
-{
+void Interpreter::process(const std::string & current_cmd) {
     Interpreter::Mode new_mode;
-    if (current_cmd == open_bracket)
-    {
+    if (current_cmd == open_bracket) {
         _bracket_counter += 1;
         new_mode = Mode::Dynamic;
     }
-    else if (current_cmd == close_bracket)
-    {
+    else if (current_cmd == close_bracket) {
         _bracket_counter -= 1;
         if (_bracket_counter == 0)
             new_mode = Mode::Static;
@@ -34,14 +26,25 @@ void Interpreter::setStatus(const std::string & current_cmd)
             new_mode = Mode::Dynamic;
     }
     else
+    {
+        _inner_interpreter->process(current_cmd);
         new_mode = _mode;
+    }
 
-    if (_mode == new_mode)
+    if (_mode == new_mode) {
         return;
+    }
     _mode = new_mode;
 
     if (_mode == Mode::Static)
+    {
+        _inner_interpreter->stop_processing();
         _inner_interpreter = std::make_shared<StaticInterpreter>(_batch_size);
+    }
+
     if (_mode == Mode::Dynamic)
+    {
+        _inner_interpreter->stop_processing();
         _inner_interpreter = std::make_shared<DynamicInterpreter>();
+    }
 }

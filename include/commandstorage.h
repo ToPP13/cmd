@@ -12,6 +12,7 @@
 
 
 std::string string_from_int(long num);
+bool file_exists (const std::string& name);
 
 
 
@@ -26,6 +27,8 @@ public:
     bool empty() const{return _commands.empty();};
     void clear(){_commands.clear();};
     uint size() const{return _commands.size();};
+    std::string get_bulk() const;
+    void print_bulk() const;
 
     std::string _filename;
     std::vector<std::string> _commands;

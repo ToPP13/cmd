@@ -5,7 +5,6 @@
 #pragma once
 
 #include "ibasicinterpreter.h"
-#include "commandstorage.h"
 
 class StaticInterpreter: public IBasicInterpreter
 {
@@ -14,8 +13,9 @@ public:
     ~StaticInterpreter();
 
     void process(std::string current_cmd) override;
+    void stop_processing() override;
+
 private:
     uint _batch_size;
-    CommandStorage _scb;
 };
 

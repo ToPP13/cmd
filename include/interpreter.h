@@ -24,7 +24,6 @@ public:
 
     Interpreter(uint batch_size);
     void process(const std::string & current_cmd);
-    void setStatus(const std::string & current_cmd);
 
 
 private:

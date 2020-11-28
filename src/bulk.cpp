@@ -1,6 +1,7 @@
 #include <vector>
 #include "iostream"
 #include <string>
+#include <sstream>
 #include "../include/lib.h"
 
 
@@ -21,12 +22,15 @@ int main(int argc, char *argv[]) {
                                       "{",  "cmd10", "cmd11"};
 
 
-    char _buf[256] = "";
     Interpreter i(batch_size);
+
+    string line;
+    std::stringstream streamIn;
+
     while (true)
     {
-        std::scanf("%255[^\n]", _buf);
-        string current_cmd = string(_buf);
+        getline(std::cin,line);
+        string current_cmd = string(line);
         if (current_cmd == eof)
             break;
         i.process(current_cmd);

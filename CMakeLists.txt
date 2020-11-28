@@ -36,10 +36,10 @@ file (GLOB MAIN_INCLUDES
 
 
 # Add a library to the project using the specified source files.
-add_executable(bulk src/bulk.cpp)
+add_executable(bulk src/bulk.cpp src/interpreter.cpp src/dynamicinterpreter.cpp src/staticinterpreter.cpp src/commandstorage.cpp src/lib.cpp)
 add_library(bulk_lib src/lib.cpp )
 # Add an executable to the project using the specified source files.
-add_executable(gtest test/gtest.cpp)
+add_executable(gtest test/gtest.cpp src/interpreter.cpp src/dynamicinterpreter.cpp src/staticinterpreter.cpp src/commandstorage.cpp src/lib.cpp)
 
 
 # Set propertiess to a target.
