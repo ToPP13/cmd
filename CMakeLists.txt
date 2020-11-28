@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.2)
 
 
 if (DEFINED ENV{TRAVIS_BUILD_NUMBER})
-    project(cmd VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+    project(bulk VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
 else ()
-    project(cmd VERSION 0.0.1)
+    project(bulk VERSION 0.0.1)
 endif ()
 
 # Load settings for an external project.
@@ -29,34 +29,28 @@ file (GLOB MAIN_INCLUDES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h*
         )
 
+#
+#source_group("src" FILES ${MAIN_SRC})
+#source_group("test" FILES ${MAIN_TEST})
+#source_group("include" FILES ${MAIN_INCLUDES})
 
-
-source_group("src" FILES ${MAIN_SRC})
-source_group("test" FILES ${MAIN_TEST})
-source_group("include" FILES ${MAIN_INCLUDES})
-
-
-#include_directories(${PROJECT_SOURCE_DIR}/test/)
-
-
-# Add an executable to the project using the specified source files.
-add_executable(cmd_cli src/cmd.cpp)
 
 # Add a library to the project using the specified source files.
-add_library(cmd src/lib.cpp)
-
+add_executable(bulk src/bulk.cpp)
+add_library(bulk_lib src/lib.cpp )
+# Add an executable to the project using the specified source files.
 add_executable(gtest test/gtest.cpp)
 
 
 # Set propertiess to a target.
-set_target_properties(cmd_cli cmd gtest PROPERTIES
+set_target_properties(bulk bulk_lib gtest PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
 
 # Add include directories to a target.
 # CMAKE_BINARY_DIR - The path to the top level of the build tree.
-target_include_directories(cmd PRIVATE "${CMAKE_BINARY_DIR}" )
+target_include_directories(bulk PRIVATE "${CMAKE_BINARY_DIR}" )
 
 # Add include directories to the build.
 include_directories(${GTEST_INCLUDE_DIR})
@@ -66,25 +60,25 @@ set_target_properties(gtest PROPERTIES
     INCLUDE_DIRECTORIES ${GTEST_INCLUDE_DIRS}
 )
 
-target_link_libraries(cmd_cli PRIVATE cmd)
-target_link_libraries(gtest ${GTEST_LIBRARIES} cmd ${GTEST_MAIN_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(bulk PRIVATE bulk_lib)
+target_link_libraries(gtest ${GTEST_LIBRARIES} bulk_lib ${GTEST_MAIN_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 # Add compile options to a target.
 if (MSVC)
-    target_compile_options(cmd_cli PRIVATE
+    target_compile_options(bulk PRIVATE
         /W4
     )
-    target_compile_options(cmd PRIVATE
+    target_compile_options(bulk_lib PRIVATE
         /W4
     )
     target_compile_options(gtest PRIVATE
         /W4
     )
 else ()    
-    target_compile_options(cmd_cli PRIVATE
+    target_compile_options(bulk PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(cmd PRIVATE
+    target_compile_options(bulk_lib PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(gtest PRIVATE
@@ -95,7 +89,7 @@ endif()
 
 
 # Load and run CMake code from a file or module.
-install(TARGETS cmd_cli RUNTIME DESTINATION bin)
+install(TARGETS bulk RUNTIME DESTINATION bin)
 
 # Set a CMake, cache or environment variable to a given value.
 set(CPACK_GENERATOR DEB)

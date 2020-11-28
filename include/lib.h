@@ -1,7 +1,6 @@
 #pragma once
 
+#include "interpreter.h"
+
 int version();
-
-
-#define USE_PRETTY 1
 
